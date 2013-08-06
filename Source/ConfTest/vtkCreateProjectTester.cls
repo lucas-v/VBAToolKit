@@ -84,71 +84,43 @@ Public Sub TestCreateProjectAlreadyExisting()
     mAssert.Equals returnvalue, 75, "The project creation must fail"
 End Sub
 
-Public Sub TestMainFolderIsCreated()
-    ' The createProject subroutine must create a new folder named like the project in the path
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
+
+'---------------------------------------------------------------------------------------
+' Procedure : TestRootFolderIsCreated
+' Author    : Abdelfattah Lahbib
+' Purpose   : Test the vtkCreateProjectRootFolder function
+'               - when given a path and a name, $path\$name must be created
+'               - TODO : the output value must be the string "$path\$name"
+'---------------------------------------------------------------------------------------
+'
+Public Sub TestRootFolderIsCreated()
+    vtkCreateProjectRootFolder vtkTestPath, vtkTestProjectName
     mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName, vbDirectory) <> "", "The project main folder must exist"
     mAssert.Equals returnvalue, 0, "The project creation must succeed"
 End Sub
 
+
+'---------------------------------------------------------------------------------------
+' Procedure : TestFolderTreeIsCreated
+' Author    : Abdelfattah Lahbib
+' Purpose   : Test the vtkCreateProjectFolderTree function
+'               - when given a path and a name, the folder tree must be created
+'---------------------------------------------------------------------------------------
 Public Sub TestProjectFolderIsCreated()
-    ' The createProject subroutine must create a new folder named Project
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
+    
+    Dim testProjectRootPath As String
+    testProjectRootPath = vtkCreateProjectRootFolder(vtkTestPath, vtkTestProjectName)
+    vtkCreateProjectFolderTree testProjectRootPath
+    
     mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\Project", vbDirectory) <> "", "The Project folder must exist"
-    mAssert.Equals returnvalue, 0, "The project creation must succeed"
-End Sub
-
-Public Sub TestSourceFolderIsCreated()
-    ' The createProject subroutine must create a new folder named Source
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
     mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\Source", vbDirectory) <> "", "The Source folder must exist"
-    mAssert.Equals returnvalue, 0, "The project creation must succeed"
-End Sub
-
-Public Sub TestTestsFolderIsCreated()
-    ' The createProject subroutine must create a new folder named Tests
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
     mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\Tests", vbDirectory) <> "", "The Tests folder must exist"
-    mAssert.Equals returnvalue, 0, "The project creation must succeed"
-End Sub
-Public Sub TestConfProdFolderIsCreated()
-    ' The createProject subroutine must create a new folder named ConfProd
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
-    mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\source\ConfProd", vbDirectory) <> "", "source\ConfProd folder must exist"
-    mAssert.Equals returnvalue, 0, "The project creation must succeed"
-End Sub
-Public Sub TestConfTestFolderIsCreated()
-    ' The createProject subroutine must create a new folder named ConfProd
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
-    mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\source\ConfTest", vbDirectory) <> "", "The source\ConfTest folder must exist"
-    mAssert.Equals returnvalue, 0, "The project creation must succeed"
-End Sub
-Public Sub TestVbaUnitFolderIsCreated()
-    ' The createProject subroutine must create a new folder named ConfProd
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
-    mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\source\VbaUnit", vbDirectory) <> "", "The source\VbaUnit folder must exist"
-    mAssert.Equals returnvalue, 0, "The project creation must succeed"
-End Sub
-Public Sub TestGitLogIsCreated()
-    ' The createProject subroutine must create a new folder named GitLog
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
+    mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\Source\ConfProd", vbDirectory) <> "", "source\ConfProd folder must exist"
+    mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\Source\ConfTest", vbDirectory) <> "", "The source\ConfTest folder must exist"
+    mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\Source\VbaUnit", vbDirectory) <> "", "The source\VbaUnit folder must exist"
     mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\GitLog", vbDirectory) <> "", "The ..\GitLog folder must exist"
-    mAssert.Equals returnvalue, 0, "The project creation must succeed"
-End Sub
-Public Sub TestDeliveryFolderIsCreated()
-    ' The createProject subroutine must create a new folder named Delivery
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
     mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\Delivery", vbDirectory) <> "", "The \Delivery folder must exist"
-    mAssert.Equals returnvalue, 0, "The project creation must succeed"
+
 End Sub
 Public Sub TestDevXlsmFileCreated()
 'test that xlsm file is created in the right path
@@ -168,13 +140,7 @@ Public Sub TestDelivXlsmFileCreated()
     returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
     mAssert.Should Dir(vtkTestPath & "\" & vtkTestProjectName & "\" & "Delivery" & "\" & vtkTestProjectName & ".xlsm", vbDirectory) <> "", "the workbook must be created"
 End Sub
-Public Sub TestDevProjectIsNamedcorrectly()
-'test that xlsm is correctly renamed
-    Dim returnvalue As Long
-    returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
-    mAssert.Should Workbooks(vtkTestProjectName & "_DEV.xlsm").VBProject.name = vtkTestProjectName & "_DEV", "the workbook name must be like " & vtkTestProjectName & "_DEV"
-End Sub
-Public Sub TestDelivProjectIsNamedcorrectly()
+Public Sub TestDelivXlsmFileIsNamedcorrectly()
 'test that xlsm is correctly renamed
     Dim returnvalue As Long
     returnvalue = vtkCreateProject(path:=vtkTestPath, name:=vtkTestProjectName, displayError:=False)
@@ -280,15 +246,8 @@ Private Function ITest_Suite() As TestSuite
     Set ITest_Suite = New TestSuite
     ITest_Suite.AddTest ITest_Manager.ClassName, "TestCreateProjectDoesNothingWhenPathDoesntExist"
     ITest_Suite.AddTest ITest_Manager.ClassName, "TestCreateProjectAlreadyExisting"
-    ITest_Suite.AddTest ITest_Manager.ClassName, "TestMainFolderIsCreated"
+    ITest_Suite.AddTest ITest_Manager.ClassName, "TestRootFolderIsCreated"
     ITest_Suite.AddTest ITest_Manager.ClassName, "TestProjectFolderIsCreated"
-    ITest_Suite.AddTest ITest_Manager.ClassName, "TestSourceFolderIsCreated"
-    ITest_Suite.AddTest ITest_Manager.ClassName, "TestTestsFolderIsCreated"
-    ITest_Suite.AddTest ITest_Manager.ClassName, "TestConfProdFolderIsCreated"
-    ITest_Suite.AddTest ITest_Manager.ClassName, "TestConfTestFolderIsCreated"
-    ITest_Suite.AddTest ITest_Manager.ClassName, "TestVbaUnitFolderIsCreated"
-    ITest_Suite.AddTest ITest_Manager.ClassName, "TestGitLogIsCreated"
-    ITest_Suite.AddTest ITest_Manager.ClassName, "TestDeliveryFolderIsCreated"
     ITest_Suite.AddTest ITest_Manager.ClassName, "TestDevXlsmFileCreated"
     ITest_Suite.AddTest ITest_Manager.ClassName, "TestDevXlsmFileIsNamedcorrectly"
     ITest_Suite.AddTest ITest_Manager.ClassName, "TestDelivXlsmFileCreated"
@@ -302,15 +261,8 @@ Private Sub ITestCase_RunTest()
     Select Case mManager.methodName
         Case "TestCreateProjectDoesNothingWhenPathDoesntExist": TestCreateProjectDoesNothingWhenPathDoesntExist
         Case "TestCreateProjectAlreadyExisting": TestCreateProjectAlreadyExisting
-        Case "TestMainFolderIsCreated": TestMainFolderIsCreated
+        Case "TestRootFolderIsCreated": TestRootFolderIsCreated
         Case "TestProjectFolderIsCreated": TestProjectFolderIsCreated
-        Case "TestSourceFolderIsCreated": TestSourceFolderIsCreated
-        Case "TestTestsFolderIsCreated": TestTestsFolderIsCreated
-        Case "TestConfProdFolderIsCreated": TestConfProdFolderIsCreated
-        Case "TestConfTestFolderIsCreated": TestConfTestFolderIsCreated
-        Case "TestVbaUnitFolderIsCreated": TestVbaUnitFolderIsCreated
-        Case "TestGitLogIsCreated": TestGitLogIsCreated
-        Case "TestDeliveryFolderIsCreated": TestDeliveryFolderIsCreated
         Case "TestDevXlsmFileCreated": TestDevXlsmFileCreated
         Case "TestDevXlsmFileIsNamedcorrectly": TestDevXlsmFileIsNamedcorrectly
         Case "TestDelivXlsmFileCreated": TestDelivXlsmFileCreated
