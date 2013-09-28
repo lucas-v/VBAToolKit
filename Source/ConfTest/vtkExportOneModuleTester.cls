@@ -59,12 +59,12 @@ End Property
 Private Sub ITestCase_SetUp(Assert As IAssert)
     Set mAssert = Assert
     
-    FileCopy source:=vtkPathToTemplateFolder & "\" & existingWorkbookName, destination:=vtkPathToTestFolder & "\" & existingWorkbookName
-    FileCopy source:=vtkPathToTemplateFolder & "\" & moduleToImport, destination:=vtkPathToTestFolder & "\" & moduleToImport
-    FileCopy source:=vtkPathToTemplateFolder & "\" & classToImport, destination:=vtkPathToTestFolder & "\" & classToImport
-    FileCopy source:=vtkPathToTemplateFolder & "\" & sheetToImport, destination:=vtkPathToTestFolder & "\" & sheetToImport
-    FileCopy source:=vtkPathToTemplateFolder & "\" & workbookToImport, destination:=vtkPathToTestFolder & "\" & workbookToImport
-    FileCopy source:=vtkPathToTemplateFolder & "\" & formToImport, destination:=vtkPathToTestFolder & "\" & formToImport
+    FileCopy Source:=vtkPathToTemplateFolder & "\" & existingWorkbookName, destination:=vtkPathToTestFolder & "\" & existingWorkbookName
+    FileCopy Source:=vtkPathToTemplateFolder & "\" & moduleToImport, destination:=vtkPathToTestFolder & "\" & moduleToImport
+    FileCopy Source:=vtkPathToTemplateFolder & "\" & classToImport, destination:=vtkPathToTestFolder & "\" & classToImport
+    FileCopy Source:=vtkPathToTemplateFolder & "\" & sheetToImport, destination:=vtkPathToTestFolder & "\" & sheetToImport
+    FileCopy Source:=vtkPathToTemplateFolder & "\" & workbookToImport, destination:=vtkPathToTestFolder & "\" & workbookToImport
+    FileCopy Source:=vtkPathToTemplateFolder & "\" & formToImport, destination:=vtkPathToTestFolder & "\" & formToImport
     
     Set wbForTest = Workbooks.Open(fileName:=vtkPathToTestFolder & "\" & existingWorkbookName)
     
@@ -83,7 +83,7 @@ End Sub
 Private Sub ITestCase_TearDown()
     On Error Resume Next
     
-    vtkCloseAndKillWorkbook wb:=wbForTest
+    vtkCloseAndKillWorkbook Wb:=wbForTest
 
     Kill PathName:=vtkPathToTestFolder & "\" & existingWorkbookName
     Kill PathName:=vtkPathToTestFolder & "\" & moduleToImport
